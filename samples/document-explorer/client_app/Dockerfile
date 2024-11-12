@@ -1,0 +1,30 @@
+#syntax=docker/dockerfile:1.4
+#checkov:skip=CKV_DOCKER_3: No need for a user
+FROM public.ecr.aws/docker/library/python:3.11.9-slim
+
+WORKDIR /app
+COPY requirements.txt ./requirements.txt
+RUN pip3 install -r requirements.txt
+
+# Set most of the environment variables from Terraform backend deployment outputs
+ENV COGNITO_DOMAIN='<COGNITO_DOMAIN>'
+ENV REGION='us-east-1'
+ENV USER_POOL_ID='<USER_POOL_ID>'
+ENV CLIENT_ID='<CLIENT_ID>'
+# CLIENT_SECRET look in AWS Console or `cognito_user_client_secret` backend output
+ENV CLIENT_SECRET='<CLIENT_SECRET>'
+ENV IDENTITY_POOL_ID='<IDENTITY_POOL_ID>'
+ENV AUTHENTICATED_ROLE_ARN='<AUTHENTICATED_ROLE_ARN>'
+ENV GRAPHQL_ENDPOINT='<GRAPHQL_ENDPOINT>'
+ENV S3_INPUT_BUCKET='<S3_INPUT_BUCKET>'
+ENV S3_PROCESSED_BUCKET='<S3_PROCESSED_BUCKET>'
+ENV CLIENT_NAME='<CLIENT_NAME>'
+
+# Replace APP_URI with the Amazon CloudFront output from Terraform frontend, then deploy Terraform frontend again
+ENV APP_URI='http://localhost:8501'
+EXPOSE 8501
+COPY . .
+ENTRYPOINT ["streamlit", "run", "Home.py", "--server.port=8501"]
+
+
+
