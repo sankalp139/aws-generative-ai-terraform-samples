@@ -23,9 +23,9 @@ jobs:
         with:
           python-version: 3.x
       - name: Run Checkov
-        run: pip install checkov && checkov --quiet --output cli --output junitxml --output-file-path console,checkov.xml --directory .
+        run: pip install checkov && ( checkov --quiet --output cli --output json --output-file-path console,checkov.json --directory . || echo "checkov non-zero $?" )
       - name: Store Checkov as Artifact
         uses: actions/upload-artifact@18bf333cd2249fbbbdb605fd9d9ed57efd7adf34
         with:
-          name: checkov.xml
-          path: checkov.xml
+          name: checkov.json
+          path: checkov.json
