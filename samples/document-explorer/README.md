@@ -139,12 +139,19 @@ Default output format [None]: json
   ```
 
   Note: The ```COGNITO_CLIENT_SECRET``` is a secret value that can be retrieved from the AWS Console. Go to the [Amazon Cognito page](https://console.aws.amazon.com/cognito/home) in the AWS console, then select the created user pool. Under App integration, select App client settings. Then, select Show Details and copy the value of the App client secret.
+
 3. Run `terraform init`
+
 4. Run `terraform import aws_cognito_user_pool_client.update_client {user-pool-id}/{client-id}` and make sure to update the `user-pool-id` and `client-id` values. In the `terraform.tfvars` folder, add the values for the `user_pool_id`, `client_name`, `client_id`, and `region`.
+
 5. Run `terraform import aws_cognito_identity_pool.update_pool {identity-pool-id}`.
+
 5. Deploy the Terraform by running `terraform apply`
+
 6. Now that you have the CloudFront URL, go back to your `client_app/Dockerfile` and paste in the value of your Cloudfront URL like `https://XXXXXXXXXXXXXX.cloudfront.net/` for your APP_URI. Save the Dockerfile and run `terraform apply` again.
+
 7. Once your changes have been applied, open your browser to the outputted URL. It may take a few moments for the webapp to become available.
+
 </details>
 
 ### Deploy the Front End Locally
