@@ -7,7 +7,6 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "chore(deps): update github-actions versions"
-      include-commit-body: true
 
   - package-ecosystem: "terraform"
     directory: "/"
@@ -15,7 +14,6 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "chore(deps): update terraform modules"
-      include-commit-body: true
 
   - package-ecosystem: "pip"
     directory: "/"
@@ -23,4 +21,3 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "chore(deps): update pip packages"
-      include-commit-body: true
