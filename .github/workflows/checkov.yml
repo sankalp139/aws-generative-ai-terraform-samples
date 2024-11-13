@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+permissions: read-all
 jobs:
   bandit:
     name: checkov/ci
