@@ -1,4 +1,5 @@
 module "serverless-streamlit-app" {
+  #checkov:skip=CKV_TF_1:Terraform registry has no ability to use a commit hash
   source          = "aws-ia/serverless-streamlit-app/aws"
   version         = "1.1.0"
   path_to_app_dir = "../client_app/"
@@ -28,6 +29,7 @@ resource "aws_cognito_user_pool_client" "update_client" {
 }
 
 resource "aws_cognito_identity_pool" "update_pool" {
+  allow_unauthenticated_identities = false
   identity_pool_name = var.client_name
   allow_classic_flow = true
   cognito_identity_providers {

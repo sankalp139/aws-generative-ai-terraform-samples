@@ -2,6 +2,8 @@
 #checkov:skip=CKV_DOCKER_3: No need for a user
 FROM public.ecr.aws/docker/library/python:3.11.9-slim
 
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y install procps
+
 WORKDIR /app
 COPY requirements.txt ./requirements.txt
 RUN pip3 install -r requirements.txt
@@ -24,6 +26,10 @@ ENV CLIENT_NAME='<CLIENT_NAME>'
 ENV APP_URI='http://localhost:8501'
 EXPOSE 8501
 COPY . .
+RUN chmod a+x /app/healthcheck.sh
+
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "/app/healthcheck.sh" ]
+
 ENTRYPOINT ["streamlit", "run", "Home.py", "--server.port=8501"]
 
 
