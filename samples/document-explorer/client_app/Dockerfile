@@ -2,7 +2,7 @@
 #checkov:skip=CKV_DOCKER_3: No need for a user
 FROM public.ecr.aws/docker/library/python:3.13.0-slim
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y install build-essential procps
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y install procps
 
 WORKDIR /app
 COPY requirements.txt ./requirements.txt
