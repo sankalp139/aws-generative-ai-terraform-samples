@@ -24,6 +24,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.backends import default_backend
 
+REQUESTS_TIMEOUT=30
 class CognitoHelper:
     """Handles user authentication with AWS Cognito."""
 
@@ -70,7 +71,8 @@ class CognitoHelper:
     # https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-verifying-a-jwt.html
     def get_cognito_jwk(self, kid):
         url = f"https://cognito-idp.{self.region}.amazonaws.com/{self.user_pool_id}/.well-known/jwks.json"
-        jwks = requests.get(url).json()
+        jwks = requests.get(url, timeout=REQUESTS_TIMEOUT).json()
+        jwks.raise_for_status()
         # Extract the specific key from jwks for verification
         for jwk in jwks["keys"]:
             if jwk["kid"] == kid:
@@ -82,7 +84,7 @@ class CognitoHelper:
         if id_token is None:
             id_token = st.session_state.get("id_token", "")
 
-        if id_token != "":
+        if id_token != "":  # nosec B105
             jwt_headers = jwt.get_unverified_header(id_token)
             jwk = self.get_cognito_jwk(jwt_headers["kid"])
             public_key = self.jwt_to_pem(jwk["n"], jwk["e"])
@@ -93,7 +95,7 @@ class CognitoHelper:
     def get_user_tokens(self, auth_code = None):
         """Gets user access and ID tokens using auth code."""
 
-        access_token = ""
+        access_token = ""  # nosec B105
         id_token = ""
 
         # if auth_code is not provided, try to get credentianls from the session state.
@@ -101,7 +103,7 @@ class CognitoHelper:
             access_token = st.session_state.get("access_token", "")
             id_token = st.session_state.get("id_token", "")
 
-            if access_token != "" and id_token != "":
+            if access_token != "" and id_token != "":  # nosec B105
                 return access_token, id_token
 
         try:
@@ -118,12 +120,12 @@ class CognitoHelper:
                 "redirect_uri": self.app_uri,
             }
             
-            token_response = requests.post(self.token_url, headers=headers, data=body)
+            token_response = requests.post(self.token_url, headers=headers, data=body, timeout=REQUESTS_TIMEOUT)
             access_token = token_response.json()["access_token"]
             id_token = token_response.json()["id_token"]
 
         except (KeyError, TypeError):
-            access_token = ""
+            access_token = "" # nosec B105
             id_token = ""
             
         return access_token, id_token
@@ -175,11 +177,11 @@ class CognitoHelper:
             auth_code = auth_query_params["code"]
             access_token, id_token = self.get_user_tokens(auth_code)
 
-            if access_token != "":
+            if access_token != "":  # nosec B105
                 st.session_state["auth_code"] = auth_code
                 st.session_state["access_token"] = access_token
 
-            if id_token != "":
+            if id_token != "":  # nosec B105
                 st.session_state["id_token"] = id_token
                 credentials = self.get_user_temporary_credentials(id_token)
                 st.session_state["access_key_id"] = credentials["AccessKeyId"]
@@ -198,7 +200,7 @@ class CognitoHelper:
         session_token = st.session_state.get("session_token", "")
         expiration = st.session_state.get("expiration")
 
-        is_valid_session = (access_key_id != "" and secret_access_key != "" and session_token != "")
+        is_valid_session = (access_key_id != "" and secret_access_key != "" and session_token != "")  # nosec B105
         # +5 seconds to consider a expiry buffer. If the session is about to expire, we need to renew it.
         has_not_expired = (expiration.timestamp() > (time.time() + 5)) if expiration else True
 

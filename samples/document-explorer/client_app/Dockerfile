@@ -1,12 +1,12 @@
 #syntax=docker/dockerfile:1.4
 #checkov:skip=CKV_DOCKER_3: No need for a user
-FROM public.ecr.aws/docker/library/python:3.13.0-slim
+FROM public.ecr.aws/docker/library/python:3.13.0-slim  # nosemgrep: dockerfile-source-not-pinned
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y install procps
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y install procps && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY requirements.txt ./requirements.txt
-RUN pip3 install -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Set most of the environment variables from Terraform backend deployment outputs
 ENV COGNITO_DOMAIN='<COGNITO_DOMAIN>'
