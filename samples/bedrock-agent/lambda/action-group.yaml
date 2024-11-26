@@ -56,26 +56,31 @@ components:
           description: The title of the book.
         subjects:
           type: array
+          maxItems: 1000
           description: The subjects of the book.
           items:
             type: string
         authors:
           type: array
+          maxItems: 100
           description: The author of the book.
           items:
             $ref: '#/components/schemas/Person'
         translators:
           type: array
+          maxItems: 100
           description: The translator of the book.
           items:
             $ref: '#/components/schemas/Person'
         bookshelves:
           type: array
+          maxItems: 1000
           description: The bookshelves the book is in.
           items:
             type: string
         languages:
           type: array
+          maxItems: 1000
           description: The languages the book is in.
           items:
             type: string
@@ -87,6 +92,7 @@ components:
           description: The media type of the book.
         formats:
           type: array
+          maxItems: 100
           description: The download formats of the book.
           items:
             $ref: '#/components/schemas/Format'
