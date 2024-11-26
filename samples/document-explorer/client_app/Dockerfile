@@ -1,6 +1,5 @@
 #syntax=docker/dockerfile:1.4
-#checkov:skip=CKV_DOCKER_3: No need for a user
-FROM public.ecr.aws/docker/library/python:3.13.0-slim  # nosemgrep: dockerfile-source-not-pinned
+FROM public.ecr.aws/docker/library/python@sha256:4efa69bf17cfbd83a9942e60e2642335c3b397448e00410063a0421f9727c4c4
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y install procps && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -30,4 +29,5 @@ RUN chmod a+x /app/healthcheck.sh
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "/app/healthcheck.sh" ]
 
+USER nobody
 ENTRYPOINT ["streamlit", "run", "Home.py", "--server.port=8501"]
