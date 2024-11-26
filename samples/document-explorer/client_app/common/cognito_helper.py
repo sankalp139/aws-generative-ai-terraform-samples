@@ -96,7 +96,7 @@ class CognitoHelper:
         """Gets user access and ID tokens using auth code."""
 
         access_token = ""  # nosec B105
-        id_token = ""
+        id_token = ""  # nosec B105
 
         # if auth_code is not provided, try to get credentianls from the session state.
         if not auth_code:
@@ -126,7 +126,7 @@ class CognitoHelper:
 
         except (KeyError, TypeError):
             access_token = "" # nosec B105
-            id_token = ""
+            id_token = ""  # nosec B105
             
         return access_token, id_token
 
