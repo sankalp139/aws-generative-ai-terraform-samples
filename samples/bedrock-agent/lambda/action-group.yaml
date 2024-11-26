@@ -3,12 +3,14 @@ info:
   title: Literary API
   description: Actions that Bedrock Agents can take to retrieve book details.
   version: 1.0.0
+security:  #checkov:skip=CKV_OPENAPI_4:Sample has no global security field rules
 paths:
   /top_books:
     get:
       summary: Get metadata about the most popular books
       description: Get metadata about the most popular books in the library.
       operationId: getTopBooks
+      security:  #checkov:skip=CKV_OPENAPI_5:Demonstration security operations empty
       responses:
         '200':
           description: Successful operation
@@ -22,6 +24,7 @@ paths:
                     description: The number of books in the library.
                   books:
                     type: array
+                    maxItems: 100
                     items:
                       $ref: '#/components/schemas/Book'
         '400':
