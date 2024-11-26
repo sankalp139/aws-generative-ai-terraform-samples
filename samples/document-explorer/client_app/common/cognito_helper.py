@@ -121,6 +121,7 @@ class CognitoHelper:
             }
             
             token_response = requests.post(self.token_url, headers=headers, data=body, timeout=REQUESTS_TIMEOUT)
+            token_response.raise_for_status()
             access_token = token_response.json()["access_token"]
             id_token = token_response.json()["id_token"]
 
