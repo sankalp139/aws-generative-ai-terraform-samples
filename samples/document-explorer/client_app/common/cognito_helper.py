@@ -71,8 +71,9 @@ class CognitoHelper:
     # https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-verifying-a-jwt.html
     def get_cognito_jwk(self, kid):
         url = f"https://cognito-idp.{self.region}.amazonaws.com/{self.user_pool_id}/.well-known/jwks.json"
-        jwks = requests.get(url, timeout=REQUESTS_TIMEOUT).json()
-        jwks.raise_for_status()
+        response = requests.get(url, timeout=REQUESTS_TIMEOUT)
+        response.raise_for_status()
+        jwks = response.json()
         # Extract the specific key from jwks for verification
         for jwk in jwks["keys"]:
             if jwk["kid"] == kid:
