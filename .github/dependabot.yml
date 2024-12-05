@@ -13,6 +13,7 @@ updates:
       - "/samples/document-explorer/terraform-config-backend"
       - "/samples/document-explorer/terraform-config-frontend"
       - "/samples/bedrock-agent"
+      - "/samples/bedrock-guardrails"
     schedule:
       interval: "weekly"
     commit-message:
@@ -22,6 +23,7 @@ updates:
     directories:
       - "/samples/document-explorer/client_app"
       - "/samples/bedrock-agent/lambda/action-group"
+      - "/samples/bedrock-guardrails/scripts"
     schedule:
       interval: "weekly"
     commit-message:
