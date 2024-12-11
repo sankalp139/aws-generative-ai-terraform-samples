@@ -14,7 +14,7 @@ provider "opensearch" {
 module "bedrock" {
   #checkov:skip=CKV_TF_1:Terraform registry has no ability to use a commit hash
   source                       = "aws-ia/bedrock/aws"
-  version                      = "0.0.4"
+  version                      = "0.0.5"
   create_kb                    = true
   create_default_kb            = true
   create_agent                 = true
@@ -26,6 +26,7 @@ module "bedrock" {
   action_group_state           = "ENABLED"
   lambda_action_group_executor = module.lambda.lambda_function_arn
   api_schema_payload           = file("${path.module}/lambda/action-group.yaml")
+  kb_embedding_model_arn       = "arn:aws:bedrock:${var.region}::foundation-model/amazon.titan-embed-text-v1"
 }
 
 module "lambda" {
