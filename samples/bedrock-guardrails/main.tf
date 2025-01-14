@@ -38,19 +38,3 @@ module "bedrock_withguardrail" {
   blocked_input_messaging   = var.blocked_input_messaging
   blocked_outputs_messaging = var.blocked_outputs_messaging
 }
-
-resource "aws_iam_role_policy" "guardrail_policy" {
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "bedrock:ApplyGuardrail",
-        ]
-        Resource = module.bedrock_withguardrail.bedrock_agent[0].guardrail_configuration.guardrail_identifier
-      }
-    ]
-  })
-  role = split("/", provider::aws::arn_parse(module.bedrock_withguardrail.bedrock_agent[0].agent_resource_role_arn).resource)[1]
-}
