@@ -85,7 +85,7 @@ This project is built using [Terraform](https://www.terraform.io/). See [Getting
    ```shell
    python -m venv .venv
    source .venv/bin/activate
-   pip install poetry
+   pip install poetry==1.8.3
    ```
 
 4. Initialize the neccessary Terraform providers.
